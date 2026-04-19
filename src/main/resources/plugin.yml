@@ -1,0 +1,15 @@
+name: CubeStore
+version: '1.0'
+main: sudark2.Sudark.cubeStore.CubeStore
+api-version: '1.21'
+load: STARTUP
+authors: [ Sudark ]
+commands:
+  store:
+    description: CubeStore admin commands
+    usage: /store <create|reload> ...
+    permission: cubestore.admin
+permissions:
+  cubestore.admin:
+    default: op
+    description: Administer CubeStore
