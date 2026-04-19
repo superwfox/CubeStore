@@ -54,4 +54,13 @@ public class FileManager {
         all.add(good);
         saveAll(all);
     }
+
+    public static int removeByName(String name) {
+        List<Good> all = loadAll();
+        int before = all.size();
+        all.removeIf(g -> g.getName().equals(name));
+        int removed = before - all.size();
+        if (removed > 0) saveAll(all);
+        return removed;
+    }
 }

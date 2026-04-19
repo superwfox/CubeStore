@@ -8,17 +8,28 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import sudark2.Sudark.cubeStore.Util.Cargo;
+import sudark2.Sudark.cubeStore.Util.Good;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommandTabCompleter implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         if (args.length == 1) {
-            return filter(Arrays.asList("create", "reload"), args[0]);
+            return filter(Arrays.asList("create", "delete", "reload"), args[0]);
+        }
+        if ("delete".equalsIgnoreCase(args[0])) {
+            if (args.length == 2) {
+                List<String> names = Cargo.CargoMap.values().stream()
+                        .map(Good::getName).distinct().collect(Collectors.toList());
+                return containsFilter(names, args[1]);
+            }
+            return List.of();
         }
         if (!"create".equalsIgnoreCase(args[0])) return List.of();
         return switch (args.length) {

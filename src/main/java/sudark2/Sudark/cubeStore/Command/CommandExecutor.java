@@ -27,6 +27,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
         }
         switch (args[0].toLowerCase()) {
             case "create" -> handleCreate(sender, args);
+            case "delete" -> handleDelete(sender, args);
             case "reload" -> {
                 Cargo.reload();
                 sender.sendMessage(CubeStore.text("§f已§7重载§f §e" + Cargo.CargoMap.size() + "§f 件商品。"));
@@ -34,6 +35,26 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
             default -> usage(sender);
         }
         return true;
+    }
+
+    private void handleDelete(CommandSender sender, String[] args) {
+        if (args.length < 2) {
+            sender.sendMessage(CubeStore.text("§f用法§7: §e/store delete §b<name>"));
+            return;
+        }
+        String name = args[1];
+        int live = Cargo.countByName(name);
+        if (live == 0) {
+            sender.sendMessage(CubeStore.text("§f未找到§7商品§7: §e" + name));
+            return;
+        }
+        if (live > 1) {
+            sender.sendMessage(CubeStore.text("§f存在§7重名§f §e" + name + "§f ×§b" + live + "§f, 已拒绝删除。"));
+            return;
+        }
+        Cargo.removeByName(name);
+        int onDisk = FileManager.removeByName(name);
+        sender.sendMessage(CubeStore.text("§f已§7删除§f §e" + name + "§f §7(磁盘§f §b×" + onDisk + "§7)§f。"));
     }
 
     private void handleCreate(CommandSender sender, String[] args) {
@@ -85,6 +106,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
     private void usage(CommandSender sender) {
         sender.sendMessage(CubeStore.text("§f用法§7:"));
         sender.sendMessage(CubeStore.text(" §e/store create §b<name> <Material> <amount> <singlePrice> <x> <y> <z> §f[world]"));
+        sender.sendMessage(CubeStore.text(" §e/store delete §b<name>"));
         sender.sendMessage(CubeStore.text(" §e/store reload"));
     }
 }

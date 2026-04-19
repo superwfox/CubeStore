@@ -78,6 +78,24 @@ public class Cargo {
         display.setCustomNameVisible(true);
     }
 
+    public static int countByName(String name) {
+        int n = 0;
+        for (Good g : CargoMap.values()) if (g.getName().equals(name)) n++;
+        return n;
+    }
+
+    public static int removeByName(String name) {
+        int removed = 0;
+        for (Map.Entry<UUID, Good> entry : CargoMap.entrySet()) {
+            if (!entry.getValue().getName().equals(name)) continue;
+            Entity ent = Bukkit.getEntity(entry.getKey());
+            if (ent != null) ent.remove();
+            CargoMap.remove(entry.getKey());
+            removed++;
+        }
+        return removed;
+    }
+
     public static void cleanupAll() {
         for (UUID id : CargoMap.keySet()) {
             Entity e = Bukkit.getEntity(id);
