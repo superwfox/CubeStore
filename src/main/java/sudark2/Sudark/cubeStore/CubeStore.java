@@ -2,6 +2,7 @@ package sudark2.Sudark.cubeStore;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import sudark2.Sudark.cubeStore.Command.CommandExecutor;
@@ -30,7 +31,8 @@ public final class CubeStore extends JavaPlugin {
             cmd.setExecutor(new CommandExecutor());
             cmd.setTabCompleter(new CommandTabCompleter());
         }
-        Cargo.reload();
+        Bukkit.getScheduler().runTaskLater(this, Cargo::reload, 20L);
+
     }
 
     @Override

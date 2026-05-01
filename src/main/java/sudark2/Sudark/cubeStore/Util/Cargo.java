@@ -1,6 +1,7 @@
 package sudark2.Sudark.cubeStore.Util;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
@@ -28,14 +29,14 @@ public class Cargo {
     public static final float ITEM_SCALE = 1.2f;
 
     private static final Transformation itemTransformation = new Transformation(
-            new Vector3f(0f, 0.5f, 0f),
+            new Vector3f(0f, -0.5f, 0f),
             new AxisAngle4f(0, 0, 0, 0),
             new Vector3f(ITEM_SCALE, ITEM_SCALE, ITEM_SCALE),
             new AxisAngle4f(0, 0, 0, 0)
     );
 
     private static final Transformation blockTransformation = new Transformation(
-            new Vector3f(-BLOCK_SCALE / 2f, 0.5f - BLOCK_SCALE / 2f, -BLOCK_SCALE / 2f),
+            new Vector3f(-BLOCK_SCALE / 2f, -0.5f - BLOCK_SCALE / 2f, -BLOCK_SCALE / 2f),
             new AxisAngle4f(0, 0, 0, 0),
             new Vector3f(BLOCK_SCALE, BLOCK_SCALE, BLOCK_SCALE),
             new AxisAngle4f(0, 0, 0, 0)
@@ -53,7 +54,8 @@ public class Cargo {
     }
 
     public static void spawnInBlock(Good good) {
-        BlockDisplay display = good.getLoc().getWorld().spawn(good.getLoc(), BlockDisplay.class);
+        Location spawnLoc = good.getLoc().clone().add(0, 1, 0);
+        BlockDisplay display = spawnLoc.getWorld().spawn(spawnLoc, BlockDisplay.class);
         display.setBlock(good.getMaterial().createBlockData());
         display.setTransformation(blockTransformation);
         display.setDisplayWidth(1f);
@@ -63,7 +65,8 @@ public class Cargo {
     }
 
     public static void spawnInItem(Good good) {
-        ItemDisplay display = good.getLoc().getWorld().spawn(good.getLoc(), ItemDisplay.class);
+        Location spawnLoc = good.getLoc().clone().add(0, 1, 0);
+        ItemDisplay display = spawnLoc.getWorld().spawn(spawnLoc, ItemDisplay.class);
         display.setItemStack(new ItemStack(good.getMaterial(), 1));
         display.setTransformation(itemTransformation);
         display.setDisplayWidth(1f);
@@ -74,7 +77,7 @@ public class Cargo {
 
     private static void applyNameplate(Display display, Good good) {
         display.customName(CubeStore.text(
-                good.getName() + " x " + good.getAmount() + " : §e" + good.totalPrice()));
+                good.getName() + " x " + good.getAmount() + " : §e" + good.getSinglePrice()));
         display.setCustomNameVisible(true);
     }
 

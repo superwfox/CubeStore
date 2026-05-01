@@ -21,7 +21,7 @@ public class CommandTabCompleter implements TabCompleter {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         if (args.length == 1) {
-            return filter(Arrays.asList("create", "delete", "reload"), args[0]);
+            return filter(Arrays.asList("create", "add", "delete", "reload"), args[0]);
         }
         if ("delete".equalsIgnoreCase(args[0])) {
             if (args.length == 2) {
@@ -30,6 +30,14 @@ public class CommandTabCompleter implements TabCompleter {
                 return containsFilter(names, args[1]);
             }
             return List.of();
+        }
+        if ("add".equalsIgnoreCase(args[0])) {
+            return switch (args.length) {
+                case 2 -> List.of("<name>");
+                case 3 -> List.of("<amount>");
+                case 4 -> List.of("<singlePrice>");
+                default -> List.of();
+            };
         }
         if (!"create".equalsIgnoreCase(args[0])) return List.of();
         return switch (args.length) {

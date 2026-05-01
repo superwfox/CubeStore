@@ -42,10 +42,6 @@ public class Good {
         return loc;
     }
 
-    public int totalPrice() {
-        return amount * singlePrice;
-    }
-
     public static Good fromConfig(ConfigurationSection s) {
         Material m = Material.matchMaterial(s.getString("material", ""));
         if (m == null) return null;
